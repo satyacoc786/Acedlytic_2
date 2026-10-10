@@ -1,0 +1,8 @@
+{
+  "name": "Acediytix - Smart Campus Analytics & Student Success Platform",
+  "description": "AI-powered smart campus analytics and student success platform integrating student records, staff details, academic calendar, attendance, examination marks, staff feedback, and biometric face authentication.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ],
+  "permissions": []
+}

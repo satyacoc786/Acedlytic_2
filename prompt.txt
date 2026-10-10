@@ -1,0 +1,1344 @@
+# ACEDIYTIX
+## AI-Powered Smart Campus Analytics & Student Success Platform
+### Smart Campus Analytics: Predict, Optimize & Improve Student Success
+
+**Project Name:** Acediytix
+
+**Project Type:** Full-stack web application with Artificial Intelligence, Machine Learning, academic analytics, face recognition, secure authentication, role-based access control, Excel integration, and a real database.
+
+**Primary Goal:** Build a complete, professional, advanced, responsive, secure, and fully functional student success platform that integrates student records, staff records, academic calendars, attendance, examination marks, staff feedback, student profiles, AI-powered performance predictions, and face-recognition authentication.
+
+**Important instruction:** Implement every feature in this specification. Do not remove, simplify, replace, or omit any requested functionality. Build one integrated application rather than separate, disconnected modules or a static dashboard.
+
+---
+
+# 1. Project Vision
+
+Develop Acediytix as an AI-powered campus analytics platform that enables colleges to understand student performance, identify students who may need academic support, monitor placement readiness, and take informed actions.
+
+The platform must integrate data from multiple sources:
+
+- Academic performance.
+- Attendance.
+- Learning Management System (LMS) activity.
+- Assignments.
+- Student engagement.
+- Extracurricular activities.
+- Skills assessments.
+- Placement preparation.
+- Student feedback.
+- Staff feedback.
+- Academic calendars.
+- Student and staff profiles.
+
+The system must go beyond displaying charts. It must convert integrated data into actionable insights using analytics, explainable Student Success Scores, machine learning predictions, meaningful student segmentation, and intervention tracking.
+
+The application must have a complete frontend, backend, database, authentication system, Excel import/export facility, ML service, automated testing, and deployment documentation.
+
+# 2. Required Technology Stack
+
+Use the following technology stack.
+
+## Frontend
+- React.js with TypeScript.
+- Vite.
+- Tailwind CSS.
+- Recharts for interactive charts.
+- GSAP for smooth animations.
+- React Router.
+- Axios or an equivalent API client.
+- React Hook Form and Zod for form validation.
+
+## Backend
+- Node.js.
+- Express.js with TypeScript.
+- REST APIs.
+- JWT-based authentication with appropriately configured secure cookies or another secure session architecture.
+- Server-side role-based and branch-based authorization.
+- Input validation, error handling, and rate limiting.
+
+## Database
+- MongoDB.
+- Mongoose.
+- Proper schemas, references, indexes, validation, timestamps, and access controls.
+
+## Machine Learning
+- Python.
+- pandas.
+- NumPy.
+- scikit-learn.
+- FastAPI for the separate ML service.
+- A suitable pretrained face-recognition model and face-embedding comparison pipeline.
+
+## File Processing
+- ExcelJS or SheetJS for XLSX and CSV processing.
+- Validation, column mapping, import previews, duplicate detection, and error reports.
+
+## Development and Deployment
+- Git and GitHub.
+- Environment variables.
+- `.env.example`.
+- Docker Compose where appropriate.
+- API documentation.
+- Automated tests.
+- Setup and deployment instructions.
+
+Use compatible dependency versions and document the exact versions used.
+
+# 3. Official Project Branding and UI Theme
+
+The official application name is **Acediytix**.
+
+Use the name consistently throughout the application, including login screens, dashboards, page titles, navigation, loading screens, notifications, exports, reports, and project documentation.
+
+Create a professional text-based logo with an academic and data-analytics identity.
+
+## White Theme Design
+
+The entire application must use a predominantly white theme.
+
+Design specifications:
+- Main background: white.
+- Secondary background: very light grey.
+- Primary text: dark navy or charcoal.
+- Accent colors: blue and cyan, used consistently.
+- Cards: white with subtle borders and soft shadows.
+- Buttons: clear labels, visible hover states, and keyboard focus indicators.
+- Charts: clean, readable, and accessible.
+- Tables: professional styling, readable rows, sorting, and pagination.
+- Forms: consistent labels, validation, and helpful messages.
+
+## Interactive and Flexible UI
+
+The application must be highly interactive, responsive, and easy for students and staff to use.
+
+Implement:
+- Smooth page transitions.
+- Subtle GSAP animations.
+- Animated dashboard statistics.
+- Interactive charts.
+- Responsive sidebars and navigation.
+- Search, sorting, and filtering.
+- Tooltips and contextual help.
+- Modals and confirmation dialogs.
+- Loading indicators.
+- Empty states.
+- Success and error notifications.
+- Responsive desktop, tablet, and mobile layouts.
+- Keyboard navigation and accessible forms.
+
+Avoid unnecessary animation that slows down the application. Prioritize usability, accessibility, performance, and a consistent white-theme design system.
+
+Create reusable UI components rather than duplicating code across pages.
+
+# 4. Authentication System: Student, Staff, and Administrator
+
+Create separate Student Login and Staff Login interfaces.
+
+Administrator access must use a protected administrative route or equivalent secure account-management workflow.
+
+## Student Login
+
+Provide:
+- Student Roll Number.
+- Password.
+- Show/Hide Password.
+- Remember Me where implemented securely.
+- Forgot Password.
+- Change Password.
+- Face Login option.
+
+## Staff Login
+
+Provide:
+- Staff ID or the staff identifier specified in the supplied staff Excel file.
+- Password.
+- Show/Hide Password.
+- Forgot Password.
+- Face Login option.
+
+## Administrator Access
+
+Administrators must have a separate protected account with institution-wide management permissions. Ordinary students and staff must never receive administrator privileges.
+
+## Shared Initial Student Password
+
+Support an administrator-configured initial password for imported student accounts, including the option to use one shared temporary password for all newly imported students.
+
+Requirements:
+- Never store passwords in plaintext.
+- Hash passwords with Argon2id or appropriately configured bcrypt.
+- Require students to change their temporary password at first login.
+- Each student must subsequently have an individual password.
+- Changing one student's password must not change another student's password.
+- Validate new passwords and confirmation fields.
+- Implement secure password-reset and account-recovery workflows.
+
+## Authentication Behavior
+
+1. Determine the selected account type.
+2. Validate the credentials through the backend.
+3. Verify that the account is active.
+4. Retrieve the verified user's role and authorized branch.
+5. Create a secure authenticated session.
+6. Redirect the user to the correct dashboard.
+7. Display appropriate errors for invalid credentials.
+8. Implement logout, session expiration, login rate limiting, and secure cookie settings.
+
+Every protected API must verify the session and authorization server-side. Never rely on frontend-only authentication or role checks.
+
+# 5. Dual Authentication: ID and Password OR Face Recognition
+
+Both students and staff must be able to authenticate using either:
+
+1. Traditional ID-and-password login.
+2. Optional face-recognition login after completing initial identity verification and face enrollment.
+
+Face recognition must be a real ML-powered authentication workflow, not a simulated UI.
+
+Traditional login must remain available even when face recognition is enabled.
+
+## 5.1 Initial Face Enrollment
+
+Before enrolling a face:
+
+1. The user selects Student or Staff.
+2. The user enters their Roll Number or Staff ID.
+3. The user enters their password.
+4. The backend verifies the credentials.
+5. The system confirms that the account is active and eligible for enrollment.
+6. The application displays an informed biometric-processing consent notice.
+7. The user explicitly agrees before camera access and enrollment.
+8. The browser requests camera permission.
+9. The camera captures suitable images or frames.
+10. The Python ML service detects the face and generates a face representation.
+11. The backend securely associates the representation with the verified account.
+12. The system confirms that face enrollment is complete.
+
+Never allow someone to enroll a face against another person's account using only a known Roll Number or Staff ID.
+
+## 5.2 Face Login Workflow
+
+Create a dedicated Face Login screen for students and staff.
+
+1. The user selects Student Face Login or Staff Face Login.
+2. The user provides their account identifier, unless an appropriately protected alternative is implemented.
+3. The application requests camera permission.
+4. The user positions their face inside an on-screen guide.
+5. The frontend captures a suitable camera frame.
+6. The backend validates the request and communicates with the authorized ML service.
+7. The ML service detects the face and compares its representation against the enrolled representation for the claimed account.
+8. The system evaluates image quality, match confidence, and the required liveness checks.
+9. If all checks succeed, the backend creates the normal authenticated session.
+10. The user is redirected to the appropriate dashboard.
+
+A face match must never directly unlock the frontend. The backend must issue the authenticated session and enforce the same authorization rules as traditional login.
+
+## 5.3 Face Recognition Technology
+
+Use a suitable pretrained face-recognition model and a documented inference pipeline.
+
+Possible components:
+- OpenCV for image processing.
+- Face detection.
+- Face-embedding extraction.
+- Cosine similarity or an appropriate embedding-distance metric.
+- Configurable and evaluated match thresholds.
+- FastAPI for the dedicated Python ML service.
+
+Do not train a face-recognition model from scratch unless suitable data and resources are available.
+
+Do not identify users merely by comparing image filenames, image URLs, Roll Numbers, or manually entered identifiers.
+
+## 5.4 Liveness and Spoofing Protection
+
+A photograph or replayed video may deceive a basic face-matching system.
+
+Implement appropriate liveness or presentation-attack checks. Reject attempts that fail required security checks.
+
+Rate-limit repeated failed attempts and document the model's limitations.
+
+If reliable liveness detection is unavailable, identify face login as a limited prototype and do not describe it as high-assurance authentication.
+
+## 5.5 Face Login Settings
+
+Add Face Login Settings to student and staff profiles.
+
+Users must be able to:
+- Enroll their face after password verification.
+- View enrollment status.
+- Disable face login.
+- Remove their stored face representation.
+- Re-enroll after verifying their account again.
+
+Disabling an account must also disable face login.
+
+Administrators may configure system-wide availability and security policies but must not retrieve users' raw face representations through ordinary administrative screens.
+
+## 5.6 Biometric Privacy and Security
+
+- Obtain explicit, informed consent.
+- Make face enrollment optional.
+- Explain what information is captured and how it is processed.
+- Encrypt stored biometric representations and restrict access.
+- Avoid retaining raw camera images unless specifically justified and protected.
+- Never expose biometric representations through public APIs.
+- Do not store biometric data in public folders or browser local storage.
+- Provide deletion and revocation procedures.
+- Preserve a usable alternative login method.
+- Record security events without unnecessarily recording biometric content.
+- Do not use face recognition for emotion detection or unrelated surveillance.
+
+Face recognition must not bypass account suspension, required password changes, or other mandatory authentication requirements.
+
+## 5.7 Face Authentication APIs
+
+Implement APIs such as:
+
+- `POST /api/auth/face/enroll`
+- `POST /api/auth/face/verify`
+- `DELETE /api/auth/face/enrollment`
+- `GET /api/auth/face/status`
+
+Define proper request validation, authentication, authorization, rate limiting, session handling, and error behavior.
+
+Prevent account enumeration, unauthorized enrollment, replay attacks, and repeated verification abuse.
+
+## 5.8 Biometric Database Fields
+
+Store suitable fields such as:
+- Enrollment status.
+- Encrypted biometric representation or secure reference.
+- Enrollment timestamp.
+- Consent-policy version.
+- Consent timestamp.
+- Revocation status.
+- Last successful verification timestamp, where appropriate.
+
+Store biometric information separately from ordinary profile data where feasible, with restricted database permissions and documented retention policies.
+
+# 6. Three Permission Levels
+
+Implement Student, Staff, and Administrator roles.
+
+## 6.1 Student Permissions
+
+Students must be able to:
+- View their own profile.
+- Upload, replace, or remove their profile picture.
+- View their attendance and attendance history.
+- View MID-1 and MID-2 marks.
+- View internal and external marks.
+- View semester results.
+- View academic percentages and available SGPA/CGPA.
+- View academic trends.
+- View their Student Success Score.
+- View personal ML predictions, explanations, and recommendations.
+- View their academic calendar.
+- Change their password.
+- Manage optional face enrollment.
+- Submit staff feedback.
+- View their feedback submission history according to college policy.
+- Submit feedback or requests for academic assistance.
+- View authorized placement readiness and skills information.
+- View intervention status and permitted faculty feedback.
+
+Students must not access another student's data by changing URLs, API parameters, Roll Numbers, or browser requests.
+
+Students must not edit official marks, attendance, branch, or Roll Number through their profile.
+
+## 6.2 Staff Permissions
+
+Each staff member must be assigned to the branch specified by the supplied staff records. If the institution requires one branch per staff member, enforce exactly one authorized branch.
+
+Staff can:
+- View their authorized branch's students.
+- Search and filter authorized students.
+- View student profiles and performance histories.
+- Mark attendance.
+- Correct attendance according to institution rules.
+- Enter and update MID-1 and MID-2 marks.
+- Enter internal assessment marks.
+- Enter external examination marks when authorized.
+- Enter semester examination marks.
+- Monitor academic performance.
+- View attendance and marks trends.
+- View Student Success Scores and ML predictions.
+- Review prediction explanations.
+- Create and manage student interventions.
+- Track intervention outcomes.
+- View feedback about themselves according to feedback privacy rules.
+- Export authorized branch reports.
+
+Staff must not access other branches' student records unless an explicitly authorized permission permits it.
+
+Enforce branch restrictions on every API, query, search, export, report, analytics operation, and update.
+
+## 6.3 Administrator Permissions
+
+Administrators can:
+- Import student, staff, and calendar files.
+- Manage accounts and account status.
+- Manage branches, subjects, academic years, and semesters.
+- Assign staff to authorized branches.
+- Configure examination and grading rules.
+- Configure temporary passwords and authentication policies.
+- View institution-wide aggregated analytics.
+- Manage import errors and audit logs.
+- Configure Success Score weights and risk thresholds.
+- Manage ML model versions and prediction settings.
+- Configure feedback categories and privacy policies.
+- Manage the academic calendar.
+- Export authorized institutional reports.
+
+# 7. Excel Integration and Data Import Center
+
+The college already has student details, staff details, and an academic calendar.
+
+Use these files as the primary sources of truth. Inspect their actual sheet names, columns, data types, missing values, identifiers, branch labels, and data quality before finalizing the database schema.
+
+Create an Excel Import Center supporting XLSX and CSV.
+
+## Import Workflow
+
+1. Upload the file.
+2. Inspect its sheets and headers.
+3. Map columns to application fields.
+4. Preview the data.
+5. Validate identifiers, types, and required fields.
+6. Detect duplicate records and conflicting identifiers.
+7. Display invalid rows and understandable errors.
+8. Allow error reports to be downloaded.
+9. Import valid records safely.
+10. Show inserted, updated, skipped, and failed record counts.
+
+Provide a dry-run preview before committing bulk changes.
+
+## Student Excel Data
+
+Support existing columns, wherever available:
+- Roll Number.
+- Student Name.
+- Mobile Number.
+- Email.
+- Branch.
+- Year of Study.
+- Semester.
+- Section.
+- Address.
+- MID-1 marks.
+- MID-2 marks.
+- Existing attendance.
+- CGPA or previous results.
+
+Additional information must remain optional until supplied or collected.
+
+Support the college's 1,000-student dataset, if that is the supplied file's actual record count. Do not hardcode student records into frontend arrays.
+
+## Staff Excel Data
+
+Import:
+- Staff ID.
+- Staff Name.
+- Contact Information.
+- Department.
+- Assigned Branch.
+- Designation.
+- Assigned Subjects.
+- Account Status.
+
+## Academic Calendar Data
+
+Import:
+- Academic Year.
+- Semester.
+- Event Title.
+- Event Type.
+- Start Date.
+- End Date.
+- Examination Date.
+- Applicable Branch.
+- Applicable Year.
+- Description.
+
+## Data Integrity
+
+- Preserve original student Roll Numbers.
+- Use institution-defined identifiers for matching.
+- Never silently merge records because names are similar.
+- Normalize branch names and year formats.
+- Preserve existing fields absent from an update file.
+- Log who imported or changed records.
+- Restrict access to student contact information.
+- Support large imports through appropriate batching or staged processing.
+
+Use synthetic demo data only when necessary, and clearly separate it from real college records.
+
+# 8. Student Profile and Dashboard
+
+Create a personalized student dashboard using real database information.
+
+## Dashboard Cards
+
+Display:
+- Student Success Score out of 100.
+- Overall attendance percentage.
+- Academic performance percentage.
+- Latest MID-1 marks.
+- Latest MID-2 marks.
+- Internal and external examination results.
+- Semester results.
+- Current academic risk category.
+- Upcoming academic events.
+- Pending assignments, when LMS data is available.
+
+## Student Profile
+
+Display:
+- Profile picture.
+- Roll Number.
+- Student Name.
+- Branch.
+- Year and semester.
+- Section.
+- Contact information according to privacy settings.
+
+Allow secure profile-image uploads with file-type validation, file-size limits, safe storage, and authorization checks.
+
+## Personal Analytics
+
+Include:
+- Marks progression.
+- Subject-wise performance.
+- Attendance progression.
+- MID-1 versus MID-2 comparison.
+- Semester results.
+- Student Success Score history.
+- Academic strengths.
+- Areas requiring improvement.
+- ML prediction explanations.
+- Data coverage and prediction date.
+
+If historical data is insufficient, display a clear explanation instead of generating misleading trends.
+
+# 9. Attendance Management
+
+Build a complete attendance module for staff.
+
+## Attendance Workflow
+
+1. Staff selects an authorized branch, academic year, semester, section, subject, and date.
+2. The system loads eligible students.
+3. Staff marks Present, Absent, or another institution-approved status.
+4. Staff submits attendance.
+5. The backend verifies authorization and duplicate-session rules.
+6. Records are saved to MongoDB.
+7. Attendance summaries are recalculated.
+8. The affected dashboards, charts, and risk indicators refresh.
+
+## Attendance Formula
+
+For a simple present/absent system:
+
+Attendance Percentage = (Classes Attended / Total Classes Held) × 100
+
+Use institution-defined rules for approved leave, exemptions, cancelled classes, and other attendance statuses.
+
+Implement:
+- Overall attendance.
+- Subject-wise attendance.
+- Daily and monthly views.
+- Attendance history.
+- Corrections with audit trails.
+- Low-attendance alerts.
+- Configurable attendance thresholds.
+- Duplicate submission prevention.
+
+Attendance must update immediately after a successful backend operation, not merely change a displayed frontend number.
+
+# 10. Examination and Marks Management
+
+Support:
+- MID-1.
+- MID-2.
+- Internal assessments.
+- External examinations.
+- Semester examinations.
+- Subject-wise results.
+- Total marks.
+- Academic percentage.
+- Grades.
+- SGPA and CGPA where the institution supplies grading rules.
+
+## Marks Entry Workflow
+
+1. Staff selects an authorized branch, year, semester, subject, and examination.
+2. The system loads eligible students.
+3. Staff enters marks.
+4. The application validates each mark against its maximum.
+5. Staff reviews and saves the results.
+6. The backend persists the changes.
+7. Academic summaries and permitted analytics refresh.
+8. The system records the changes in audit logs.
+
+MID-1 and MID-2 must each support a maximum of 15 marks for the supplied dataset, unless the institution configures a different scheme.
+
+Do not assume maximum marks for internal or external examinations without examining the source records or examination configuration.
+
+## Academic Calculations
+
+Normalize marks against their maximum possible scores and apply configured assessment weights.
+
+Do not add raw marks with different maximum values as if they were directly comparable.
+
+When marks change:
+- Recalculate affected subject percentages.
+- Recalculate overall academic performance where sufficient data exists.
+- Update charts and performance tables.
+- Refresh eligible predictions according to the model's update policy.
+- Preserve previous values in the audit trail.
+
+Display missing marks as Not Available rather than automatically treating them as zero.
+
+# 11. Academic Calendar
+
+Build a functional calendar using the supplied academic calendar file.
+
+Provide:
+- Monthly view.
+- Weekly view.
+- Agenda view.
+- Academic-year filters.
+- Semester filters.
+- Branch and year filters.
+- Examination schedules.
+- MID-1 and MID-2 dates.
+- Assignment deadlines, if supplied.
+- Holidays.
+- Workshops.
+- Hackathons.
+- Seminars.
+- Placement activities.
+- Event descriptions and dates.
+- Upcoming-event notifications.
+
+Authorized staff and administrators can create or update events according to their permissions. Students can view applicable events but cannot modify official calendar records.
+
+Never invent actual college examination dates or holidays. Allow authorized administrators to complete missing data.
+
+# 12. Faculty Performance Monitoring
+
+Build a Student Performance Monitoring Center for staff.
+
+Include:
+- Student search by Roll Number or name.
+- Branch, year, semester, section, and subject filters.
+- Attendance.
+- MID-1 and MID-2 marks.
+- Internal and external marks.
+- Semester results.
+- Academic percentages.
+- Student Success Score.
+- Academic risk indicators.
+- Historical performance.
+- ML prediction explanations.
+- Intervention history.
+- Improvement trends.
+
+Provide filters for:
+- Low attendance.
+- Declining marks.
+- Multiple subjects below configured thresholds.
+- Students who may benefit from placement preparation.
+- Incomplete student records.
+- Students whose performance has improved after support.
+
+This module must support academic improvement rather than permanently labeling students as failures.
+
+# 13. Student-to-Staff Feedback System
+
+Create a complete module that allows students to give feedback about their teachers and staff.
+
+## Student Feedback Form
+
+Fields:
+- Staff member selection.
+- Subject or course, if applicable.
+- Feedback category.
+- Rating from 1 to 5.
+- Written feedback.
+- Optional improvement suggestions.
+- Submission date generated by the system.
+
+Suggested categories:
+- Teaching clarity.
+- Subject knowledge.
+- Doubt clarification.
+- Classroom engagement.
+- Timeliness of feedback.
+- Assignment guidance.
+- Overall teaching experience.
+
+Students must submit feedback through their own authenticated accounts. The backend must validate the staff member, relevant subject, and submission permissions.
+
+## Feedback Privacy Modes
+
+Support:
+- Identified feedback, where the authorized reviewer can see the student's identity.
+- Confidential feedback, where ordinary staff views hide the student's identity.
+
+Explain the privacy mode before submission. Do not promise absolute anonymity if restricted institutional records may identify the submitter.
+
+Allow editing or withdrawal only according to the college's configured policy.
+
+## Staff Feedback Dashboard
+
+Staff may view feedback relevant to them, subject to the configured privacy rules.
+
+Display:
+- Average rating.
+- Number of responses.
+- Rating distribution.
+- Category breakdown.
+- Trends over time.
+- Authorized written comments.
+- Improvement suggestions.
+- Feedback history.
+
+Confidential-feedback identities must not be exposed to ordinary staff accounts.
+
+## Administrator Feedback Dashboard
+
+Authorized administrators can:
+- Configure feedback categories.
+- Configure privacy policies.
+- Monitor submission statistics.
+- Review feedback according to institutional policy.
+- Identify recurring teaching-support themes.
+- Export appropriately anonymized reports.
+- Moderate inappropriate submissions using a documented process.
+
+Do not automatically penalize staff based on a small number of ratings. Feedback scores must not be the sole basis for staff performance decisions.
+
+## Feedback Database and APIs
+
+Create a `staffFeedback` collection with:
+- Feedback ID.
+- Student reference with restricted access.
+- Staff reference.
+- Subject reference where applicable.
+- Rating.
+- Category.
+- Written comments.
+- Privacy mode.
+- Submission timestamp.
+- Moderation status.
+- Updated timestamp if editing is allowed.
+
+Implement APIs for submission, retrieval, authorized aggregated ratings, and feedback-policy management.
+
+Staff feedback must remain separate from academic marks and the Student Success Score unless the institution later approves a validated, clearly defined use case.
+
+# 14. Student Success Score
+
+Calculate a transparent Student Success Score between 0 and 100.
+
+Start with configurable weights such as:
+
+| Indicator | Initial Weight |
+|---|---:|
+| Academic performance | 40% |
+| Attendance | 25% |
+| LMS and assignment completion | 10% |
+| Placement readiness | 10% |
+| Skills assessment | 10% |
+| Engagement and participation | 5% |
+| Total | 100% |
+
+Formula:
+
+Student Success Score = Sum of (Normalized Indicator Score × Indicator Weight).
+
+Normalize each indicator to a 0–100 scale.
+
+Requirements:
+- Treat weights as configurable starting values, not scientifically validated constants.
+- Do not treat missing indicators as zero automatically.
+- Renormalize available weights transparently or mark the score provisional.
+- Show data coverage.
+- Show the calculation date.
+- Explain indicator contributions.
+- Use only relevant, authorized data.
+- Do not use protected or irrelevant personal characteristics.
+- Do not present the score as a definitive measure of a student's ability or future.
+
+Initial interpretation:
+- 80–100: Strong current indicators.
+- 60–79: Developing; monitor progress.
+- 40–59: Support may be beneficial.
+- Below 40: Priority for faculty review.
+
+These bands must be configurable and must not be presented as validated probabilities of success.
+
+# 15. Artificial Intelligence and Machine Learning
+
+Build a genuine ML pipeline, not randomly generated predictions or hardcoded AI insights.
+
+## 15.1 Academic Performance Prediction
+
+Predict a clearly defined future outcome, such as:
+- Next examination performance.
+- Future academic percentage.
+- Probability of falling below an academic threshold.
+- Potential backlog risk where suitable historical labels exist.
+
+Possible features:
+- Previous examination marks.
+- MID-1 and MID-2 marks.
+- Subject-wise performance.
+- Attendance history.
+- Previous semester results.
+- Assignment completion.
+- Relevant LMS activity.
+- Relevant engagement and skills indicators.
+
+Start with a suitable baseline such as linear regression or logistic regression. Evaluate Random Forest or gradient boosting when appropriate.
+
+Select models using evaluation results and interpretability, not complexity alone.
+
+## 15.2 Placement Readiness Prediction
+
+Use available:
+- Aptitude assessments.
+- Coding assessments.
+- Technical skills.
+- Communication assessments.
+- Soft-skill assessments.
+- Mock interviews.
+- Placement preparation activity.
+- Historical placement outcomes where available and authorized.
+
+Do not predict actual placement outcomes from academic marks alone without suitable validated training data.
+
+## 15.3 Risk Identification
+
+Support configurable categories:
+- Low concern.
+- Moderate concern.
+- High concern.
+- Insufficient data.
+
+Distinguish a low predicted outcome from low confidence in a prediction.
+
+## 15.4 Training and Evaluation
+
+Implement:
+- Data cleaning.
+- Feature engineering.
+- Train, validation, and test splits.
+- Leakage prevention.
+- Baseline models.
+- Cross-validation where appropriate.
+- Evaluation metrics.
+- Model versioning.
+- Prediction timestamps.
+- Periodic retraining.
+- Performance monitoring.
+
+For regression, consider MAE and RMSE. For classification, consider precision, recall, F1-score, ROC-AUC, and PR-AUC where appropriate.
+
+If the dataset is small, imbalanced, or lacks outcome labels, report those limitations and use an appropriate baseline or rule-based assessment until sufficient data is available.
+
+## 15.5 Explainable Predictions
+
+Display:
+- Predicted outcome.
+- Confidence or uncertainty where meaningfully calibrated.
+- Strongest contributing indicators.
+- Relevant historical changes.
+- Model version.
+- Prediction date.
+- Suggested support actions.
+
+Use feature importance or SHAP where appropriate. Do not confuse model feature contributions with causal explanations.
+
+Never claim that a student will fail or succeed with certainty.
+
+## 15.6 AI Recommendations
+
+Provide evidence-based suggestions such as:
+- Faculty review for declining marks.
+- Attendance follow-up where permitted.
+- Additional subject practice.
+- Assignment reminders.
+- Aptitude practice.
+- Coding practice.
+- Mock interviews.
+- Skills-development workshops.
+- Follow-up after interventions.
+
+Faculty should review and approve consequential interventions.
+
+# 16. Student Segmentation
+
+Build student segments that support targeted interventions.
+
+Examples:
+1. Strong academics, low placement readiness.
+2. Good attendance, declining marks.
+3. Low attendance, declining marks.
+4. Strong academics and placement readiness.
+5. Good academics, low LMS engagement.
+6. Insufficient data.
+7. Students showing improvement after support.
+
+Start with explainable rules. Introduce K-Means or other clustering only when appropriate data and validation support meaningful groups.
+
+For each segment, show:
+- Number of students.
+- Selection criteria.
+- Relevant indicators.
+- Suggested actions.
+- Branch and year distribution.
+- Changes over time.
+
+Recalculate segments as new data arrives. Do not treat segment membership as a permanent label.
+
+# 17. Administrator Analytics Dashboard
+
+Create an institution-wide analytics dashboard using real database data.
+
+## Overview Cards
+- Total students.
+- Total staff.
+- Number of branches.
+- Average attendance.
+- Average academic percentage.
+- Average Student Success Score.
+- Students requiring review.
+- Students with insufficient data.
+- Placement readiness statistics where supported by data.
+
+## Interactive Charts
+- Students by branch and year.
+- Attendance by branch.
+- Academic performance by semester.
+- MID-1 versus MID-2 comparison.
+- Performance trends across examinations.
+- Student Success Score distribution.
+- Academic risk distribution.
+- Placement readiness by branch.
+- Improvement after interventions.
+- Missing-data analysis.
+
+## Dashboard Filters
+- Academic year.
+- Semester.
+- Branch.
+- Year of study.
+- Section.
+- Subject.
+- Examination.
+- Date range.
+
+All charts and cards must use actual database data. Filters must update results dynamically and respect permissions.
+
+Staff must see only authorized branch-level analytics. Institution-wide views are reserved for authorized administrators.
+
+# 18. Student Intervention Management
+
+Create a complete workflow for academic support.
+
+Each intervention must contain:
+- Student Roll Number.
+- Reason for intervention.
+- Related academic, attendance, or skills indicator.
+- Recommended action.
+- Assigned authorized staff member.
+- Priority.
+- Creation date.
+- Due date.
+- Status.
+- Follow-up notes.
+- Outcome.
+
+Statuses:
+- New.
+- Reviewed.
+- In Progress.
+- Completed.
+- Closed.
+
+Allow authorized staff to track support actions and review subsequent student performance.
+
+Compare relevant indicators before and after interventions, describing observed changes without claiming causation without appropriate evidence.
+
+# 19. Database Architecture
+
+Use MongoDB collections with appropriate references, indexes, validation, timestamps, and access controls.
+
+Suggested collections:
+- `students`
+- `staff`
+- `branches`
+- `subjects`
+- `academicYears`
+- `semesters`
+- `attendanceSessions`
+- `attendanceRecords`
+- `examinations`
+- `marks`
+- `academicCalendarEvents`
+- `studentProfiles`
+- `studentSkills`
+- `lmsActivity`
+- `engagementRecords`
+- `placementAssessments`
+- `feedback`
+- `staffFeedback`
+- `successScores`
+- `mlPredictions`
+- `mlModelVersions`
+- `interventions`
+- `notifications`
+- `auditLogs`
+
+Keep biometric data in a separately protected structure where feasible.
+
+Use stable identifiers and avoid unrelated duplicated values.
+
+Attendance and marks must have authoritative records. Summaries may be calculated dynamically or cached with a reliable invalidation strategy.
+
+Use transactions where supported and appropriate for multi-record updates.
+
+# 20. Required Frontend Pages
+
+Create these pages with reusable components and clear routing:
+
+1. Acediytix landing or login selection page.
+2. Student Login.
+3. Staff Login.
+4. Student Face Login.
+5. Staff Face Login.
+6. Face Enrollment.
+7. Password change and recovery.
+8. Student dashboard.
+9. Student profile.
+10. Student attendance.
+11. Student marks and academic results.
+12. Student Success Score and AI insights.
+13. Student academic calendar.
+14. Student-to-staff feedback form.
+15. Student feedback history.
+16. Staff dashboard.
+17. Branch student directory.
+18. Attendance entry and history.
+19. Marks entry and examination management.
+20. Student performance monitoring.
+21. Student intervention management.
+22. Staff feedback dashboard.
+23. Academic calendar management.
+24. Administrator dashboard.
+25. Student and staff Excel import center.
+26. Branch and subject management.
+27. Academic year, semester, and examination settings.
+28. ML model monitoring.
+29. Audit logs and reports.
+30. Account management.
+31. Face Login Settings.
+
+All pages must use the white theme, responsive layouts, clear navigation, proper loading states, and real backend integration.
+
+# 21. Backend API Requirements
+
+Implement documented REST APIs for:
+
+## Authentication
+- Student login.
+- Staff login.
+- Logout.
+- Change password.
+- Password reset.
+- Session validation.
+- Face enrollment.
+- Face verification.
+- Face enrollment status.
+- Face enrollment removal.
+
+## Student and Staff Management
+- Authorized profile retrieval.
+- Profile updates.
+- Profile-picture upload.
+- Student search.
+- Staff management.
+- Branch assignment.
+- Account status management.
+
+## Excel Integration
+- File upload.
+- Sheet inspection.
+- Column mapping.
+- Data validation.
+- Import preview.
+- Record import.
+- Error-report download.
+- Authorized export.
+
+## Attendance
+- Attendance session creation.
+- Attendance entry and correction.
+- Attendance history.
+- Attendance summaries.
+
+## Examinations
+- Examination configuration.
+- Marks entry and updates.
+- Academic percentage calculation.
+- Subject and semester results.
+
+## Calendar
+- Calendar import.
+- Authorized event creation and updates.
+- Upcoming event retrieval.
+
+## Feedback
+- Student feedback submission.
+- Authorized feedback retrieval.
+- Staff feedback summaries.
+- Feedback moderation.
+- Feedback policy management.
+
+## Analytics and ML
+- Success Score calculation.
+- Dashboard analytics.
+- Student segmentation.
+- Prediction generation and retrieval.
+- Prediction explanations.
+- Model-version information.
+- Data coverage and uncertainty.
+- Intervention recommendations.
+
+## Interventions
+- Create support actions.
+- Assign authorized staff.
+- Update intervention status.
+- Record follow-up notes.
+- Review outcomes.
+
+Every endpoint must include appropriate authentication, authorization, validation, error handling, and audit logging.
+
+# 22. Security and Data Privacy
+
+Implement:
+- Server-side role-based authorization.
+- Branch-level restrictions.
+- Secure password hashing.
+- Secure session management.
+- Input validation.
+- Output encoding.
+- Authentication rate limiting.
+- Protection against common web vulnerabilities.
+- Secure file uploads.
+- Environment-based secrets.
+- Audit trails for sensitive changes.
+- Biometric consent and deletion controls.
+- Restricted access to personal and biometric data.
+- Appropriate data-retention policies.
+
+Never expose password hashes, secret keys, internal credentials, or unrestricted student data.
+
+Students must not access other students' records. Staff must not access records outside their authorized branches.
+
+The same permissions must apply after face login as after password login.
+
+# 23. Testing and Quality Assurance
+
+Write automated tests for authentication, authorization, data integrity, analytics, and major workflows.
+
+## Authentication
+- Valid student login.
+- Valid staff login.
+- Invalid credentials.
+- Initial password change.
+- Password change and recovery.
+- Disabled-account restrictions.
+- Secure session expiration.
+- Unauthorized API rejection.
+
+## Branch and Role Restrictions
+- Students cannot retrieve other students' profiles.
+- Students cannot modify official marks or attendance.
+- Staff cannot access other branches' students.
+- Staff cannot update another branch's marks or attendance.
+- Staff cannot bypass restrictions through exports or analytics APIs.
+- Administrator-only operations reject unauthorized users.
+
+## Face Login
+- Enrollment requires successful account verification.
+- A user cannot enroll against another person's account.
+- Unregistered or mismatched faces are rejected.
+- Failed liveness checks prevent authentication.
+- Camera permission denial offers a fallback.
+- Repeated failures trigger rate limiting.
+- Disabled accounts cannot use face login.
+- Revoked enrollment prevents future face authentication.
+- Successful verification creates a normal authenticated session.
+- Biometric information is never exposed through public APIs.
+
+## Attendance and Marks
+- Attendance changes update summaries correctly.
+- Duplicate sessions are handled safely.
+- MID marks cannot exceed their configured maximum.
+- Marks updates recalculate academic summaries.
+- Missing data is handled correctly.
+- Dashboard charts reflect database updates.
+
+## Feedback
+- Students can submit feedback for eligible staff.
+- Students cannot impersonate other students.
+- Confidential identities are hidden from ordinary staff views.
+- Unauthorized users cannot access unrelated feedback.
+- Feedback aggregates are calculated correctly.
+
+## Analytics and ML
+- Success Scores use the documented formula.
+- Missing indicators are handled transparently.
+- Predictions use trained models or are marked unavailable.
+- Model metrics are calculated correctly.
+- Prediction explanations reflect actual model inputs.
+- Interventions can be tracked through completion.
+
+## End-to-End Workflow
+1. Import the supplied student, staff, and calendar files.
+2. Assign staff to branches.
+3. Log in as staff.
+4. Mark attendance for an authorized branch.
+5. Update MID-1, MID-2, internal, external, and semester marks as configured.
+6. Verify attendance and academic summaries update.
+7. Review Success Scores and eligible ML predictions.
+8. Log in as a student and verify that only their own information is accessible.
+9. Submit feedback about an eligible staff member.
+10. Log in as staff and verify the appropriate feedback visibility.
+11. Enroll a face after password verification.
+12. Test subsequent face login.
+13. Verify that role and branch restrictions remain enforced.
+14. Verify academic calendar events and intervention tracking.
+
+# 24. Required Deliverables
+
+Provide:
+1. Complete frontend source code.
+2. Complete Node.js backend.
+3. Python ML service.
+4. Face-recognition enrollment and verification pipeline.
+5. Model-training and evaluation scripts.
+6. MongoDB schemas and indexes.
+7. Excel import and export implementation.
+8. Environment-variable template.
+9. API documentation.
+10. README with architecture and setup.
+11. Automated tests.
+12. Sample configuration and synthetic demo data.
+13. Deployment instructions.
+14. A short project presentation explaining the problem, architecture, Success Score, ML models, face login, feedback module, dashboard, and insights.
+
+Do not require manual entry of every student. Support importing the college's actual student, staff, and calendar records.
+
+# 25. Development Roadmap
+
+## Phase 1: Foundation
+- Inspect all supplied Excel files.
+- Design the database schema.
+- Set up React, Express, MongoDB, and Python ML services.
+- Implement authentication and authorization.
+- Establish the white-theme design system.
+
+## Phase 2: Data Integration
+- Implement student, staff, and academic calendar imports.
+- Add validation and duplicate detection.
+- Verify the imported data.
+
+## Phase 3: Authentication and Profiles
+- Complete student and staff login.
+- Implement password change and recovery.
+- Implement secure profile-picture upload.
+- Build face enrollment, optional face login, consent, and biometric protection.
+
+## Phase 4: Academic Operations
+- Implement attendance management.
+- Implement marks and examination management.
+- Add academic percentage calculations.
+- Build student profiles and calendars.
+
+## Phase 5: Analytics
+- Implement Student Success Scores.
+- Build dashboards and interactive charts.
+- Add student segmentation.
+- Implement performance monitoring and reports.
+
+## Phase 6: Feedback and Interventions
+- Implement student-to-staff feedback.
+- Build staff feedback dashboards.
+- Add privacy controls and moderation.
+- Implement intervention assignment and follow-up.
+
+## Phase 7: Machine Learning
+- Define prediction targets.
+- Prepare historical training data.
+- Train and evaluate baseline models.
+- Implement explainable predictions.
+- Integrate recommendations and prediction monitoring.
+
+## Phase 8: Testing and Deployment
+- Test security and permissions.
+- Test end-to-end workflows.
+- Optimize database queries and imports.
+- Document setup and deployment.
+- Prepare the final demonstration.
+
+Do not mark a feature complete until its frontend, backend, database behavior, permissions, validation, and tests have been implemented.
+
+# 26. Final Acceptance Criteria
+
+Acediytix is complete only when:
+
+- All supplied college files can be imported and validated.
+- Student and staff accounts have separate login experiences.
+- Shared temporary passwords are handled securely.
+- Students can change their passwords individually.
+- Optional face enrollment requires prior identity verification and consent.
+- Enrolled students and staff can use face login.
+- Traditional ID-and-password login remains available.
+- Face verification produces a backend-authenticated session.
+- Biometric information is protected and revocable.
+- Students can view only their own information.
+- Staff can manage only authorized branch students.
+- Attendance updates are persisted and recalculated.
+- Marks updates are persisted and recalculated.
+- Academic calendars use actual supplied or authorized records.
+- Students can submit staff feedback.
+- Staff feedback visibility follows privacy rules.
+- Student Success Scores use documented calculations.
+- ML predictions use evaluated models when sufficient labeled data exists.
+- Prediction explanations and limitations are visible.
+- Student segmentation supports meaningful interventions.
+- Dashboards display real database information.
+- Excel import and export work.
+- Security and authorization tests pass.
+- The application runs using the documented instructions.
+
+# FINAL INSTRUCTION TO THE CODING AI
+
+Build Acediytix as one fully integrated, modular, maintainable application.
+
+Begin by inspecting the actual student Excel file, staff Excel file, and academic calendar. Report the sheet names, columns, data types, missing values, branch labels, and identifier quality before finalizing the schema.
+
+Then implement the application incrementally, keeping the database authoritative, the user interface consistently white-themed, and all permissions enforced on the backend.
+
+Do not generate fake academic records, fabricated ML accuracy, unsupported predictions, or misleading face-recognition security claims.
+
+Do not replace real functionality with static cards, dummy buttons, hardcoded dashboards, or simulated API responses in the completed application.
+
+Every requested feature must integrate with the correct database records, authentication system, APIs, authorization rules, and user interface.
+
+The final result must be a working, professional, AI-powered Smart Campus Analytics & Student Success Platform named **Acediytix**.
